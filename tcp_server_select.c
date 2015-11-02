@@ -1,6 +1,8 @@
 #include "inet.h"                         /* 前の inet.h を include */
 #define BUFSIZE 1024
 
+int battle[2];
+
 char reverse(char s) {
   if (islower(s)){
     return (char)toupper((int)s);
@@ -18,15 +20,22 @@ void reverse_str(char *src, char *dist, int n) {
 int service(int fd)                       /* サーバの仕事，終わりならば0を返す */
 {                                         /* fd は通信に用いるファイル記述子 */
   char b[BUFSIZE];                        /* 一時的なバッファ */
-  char ret[BUFSIZE];
   int n;
+  int input;
 
   if ( (n = read(fd, b, BUFSIZE)) <= 0 )  /* fd から読み込む */
-    return 0;                             /* 文字数が0以下なら終わり */
-  reverse_str(b, ret, BUFSIZE);
-  printf("fd = %d, n = %d, b = \"%s\"\n", fd, n, b);
-  write(fd, ret, BUFSIZ);
-                                          /* fd，長さ，受信文字列を出力 */
+    return 1;
+  if ( 31 > atoi(b) || 256 < atoi(b) ){
+    return 1;
+  }
+  printf("\n\nfd = %d, n = %d, b = \"%d\"\n\n", fd, n, atoi(b));
+  printf("%s\n", b);
+  if ( battle[0] == fd && battle[1] != 0) {
+    write(battle[1], b, BUFSIZ);
+  } else if ( battle[1] == fd &&  battle[0] != 0) {
+    write(battle[0], b, BUFSIZ);
+  }
+                                         /* fd，長さ，受信文字列を出力 */
   return n;
 }
 
@@ -71,6 +80,8 @@ int main(int argc, char **argv)
   game g;
   create_game(&g);
   print_b(&g.b);
+  show_boningen(&g);
+  print_field(&g);
 
   if ( (sockfd = socket(PF_INET, SOCK_STREAM, 0)) < 0 ) /* ソケット */
     error("cannot create socket");
@@ -98,6 +109,14 @@ int main(int argc, char **argv)
           clilen = sizeof(cli);              /* 接続を受け入れる準備 */
           if ( (newfd = accept(sockfd, (struct sockaddr *)&cli, &clilen)) < 0 )
             error("cannot accept");
+          if (battle[0] == 0 ){
+            battle[0] = newfd;
+            write(newfd, "0", 6);
+          } else if(battle[0] != 0) {
+            battle[1] = newfd;
+            write(newfd, "1", 6);
+          } else if (battle[1] != 0) {
+          }
           update_min_max(newfd, &fd_min, &fd_max);
           printf("Accetpted new connection: fd = %d\n", newfd);
           FD_SET(newfd, &allfds);            /* selectによる調査対象に加える */

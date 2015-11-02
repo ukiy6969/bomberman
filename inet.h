@@ -12,6 +12,6 @@
 #include "game.h"
 
 #define SERVER_ADDR "127.0.0.1"  /* サーバのアドレス，ここは各自変える */
-#define  STUDENT_ID  193             /* 自分の学籍番号の下3けた，ここも各自変える */
+#define  STUDENT_ID  196             /* 自分の学籍番号の下3けた，ここも各自変える */
 #define PORT_BASE   12000
 #define SERVER_PORT (PORT_BASE+STUDENT_ID) /* 受付ポート番号 */

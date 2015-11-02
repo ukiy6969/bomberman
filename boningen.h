@@ -2,10 +2,10 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define BONINGEN_WIDTH 5
+#define BONINGEN_WIDTH 3
 #define BONINGEN_HEIGHT 3
 
-#define _BONINGEN_WIDTH 6
+#define _BONINGEN_WIDTH 4
 #define _BONINGEN_HEIGHT 3
 
 typedef struct {

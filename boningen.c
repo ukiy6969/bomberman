@@ -9,49 +9,39 @@ void create_boningen(boningen* b) {
 
 void create_mboningen(char b[_BONINGEN_HEIGHT][_BONINGEN_WIDTH]) {
   int i;
-  memcpy(b[0], "  O  ",BONINGEN_WIDTH);
-  memcpy(b[1], " /|\\ ",BONINGEN_WIDTH);
-  memcpy(b[2], " /\\  ", BONINGEN_WIDTH);
-  for(i = 0; i < BONINGEN_HEIGHT; i++) {
-    b[i][_BONINGEN_WIDTH - 1] = '\0';
-  }
+  memcpy(b[0], " O ",_BONINGEN_WIDTH);
+  memcpy(b[1], "/I\\",_BONINGEN_WIDTH);
+  memcpy(b[2], "/\\ ", _BONINGEN_WIDTH);
 }
 
 void create_aboningen(char b[_BONINGEN_HEIGHT][_BONINGEN_WIDTH]) {
   int i;
-  memcpy(b[0], "  O  ", BONINGEN_WIDTH);
-  memcpy(b[1], " /|\\ ", BONINGEN_WIDTH);
-  memcpy(b[2], "  /\\ ", BONINGEN_WIDTH);
-  for(i = 0; i < BONINGEN_HEIGHT; i++) {
-    b[i][_BONINGEN_WIDTH - 1] = '\0';
-  }
+  memcpy(b[0], " O ", _BONINGEN_WIDTH);
+  memcpy(b[1], "/I\\", _BONINGEN_WIDTH);
+  memcpy(b[2], " /\\", _BONINGEN_WIDTH);
 }
 
 void create_mboningen_attk(char b[_BONINGEN_HEIGHT][_BONINGEN_WIDTH]) {
   int i;
-  memcpy(b[0], "  O  ", BONINGEN_WIDTH);
-  memcpy(b[1], " /|--", BONINGEN_WIDTH);
-  memcpy(b[2], " /\\  ", BONINGEN_WIDTH);
-  for(i = 0; i < BONINGEN_HEIGHT; i++) {
-    b[i][_BONINGEN_WIDTH - 1] = '\0';
-  }
+  memcpy(b[0], " O ", _BONINGEN_WIDTH);
+  memcpy(b[1], "/|-", _BONINGEN_WIDTH);
+  memcpy(b[2], "/\\ ", _BONINGEN_WIDTH);
 }
 
 void create_aboningen_attk(char b[_BONINGEN_HEIGHT][_BONINGEN_WIDTH]) {
   int i;
-  memcpy(b[0], "  O  ", BONINGEN_WIDTH);
-  memcpy(b[1], "--|\\", BONINGEN_WIDTH);
-  memcpy(b[2], "  /\\ ", BONINGEN_WIDTH);
-  for(i = 0; i < BONINGEN_HEIGHT; i++) {
-    b[i][_BONINGEN_WIDTH - 1] = '\0';
-  }
+  memcpy(b[0], " O ", _BONINGEN_WIDTH);
+  memcpy(b[1], "-|\\", _BONINGEN_WIDTH);
+  memcpy(b[2], " /\\", _BONINGEN_WIDTH);
 }
 
 void print_boningen(char b[_BONINGEN_HEIGHT][_BONINGEN_WIDTH]) {
-  int i;
+  int i, j;
   for(i=0; i<BONINGEN_HEIGHT;i++) {
-    printf("%s\n", b[i]);
+    printf("%s", b[i]);
+    printf("|\n");
   }
+  printf("\n");
 }
 void print_b(boningen *b) {
   print_boningen(b->m_bo);
