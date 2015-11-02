@@ -7,6 +7,12 @@ void create_game(game* game) {
   game->m_b_y = DEF_GRD;
   game->a_b_x = DEF_A_POS_X;
   game->a_b_y = DEF_GRD;
+  game->m_bomb[0] = 0;
+  game->m_bomb[1] = 0;
+  game->a_bomb[0] = 0;
+  game->a_bomb[1] = 0;
+  game->m_is_bomb = 0;
+  game->a_is_bomb = 0;
 }
 
 void create_field(char f[_FIELD_HEIGHT][_FIELD_WIDTH]) {
@@ -100,6 +106,36 @@ int moval_m_b(game *g, int dx, int dy) {
   return 1;
 }
 
+int set_bomb_m(game *g) {
+  int x = g->m_b_x;
+  int y = g->m_b_y - 1;
+  pthread_t th;
+  bomb_args bargs = { 2, g };
+  if ( (x - 1) % 3 == 1 && (y - 1) % 3 == 1 && !g->m_is_bomb) {
+    g->m_bomb[0] = x;
+    g->m_bomb[1] = y;
+    g->m_is_bomb = 1;
+    pthread_create( &th, NULL, bomb_thread_m, &bargs);
+  }
+}
+
+void* bomb_thread_m(void *args) {
+  bomb_args *bargs = (bomb_args *)args;
+  game *g = bargs->game;
+  int sleep = bargs->sleep;
+  int i, j;
+  if (! g->m_is_bomb ){
+    return NULL;
+  }
+  sleep(sleep);
+  for(i = g->m_bomb[0]; i < MAX_LEFT; i++) {
+    g->field[g->m_bomb[1]][i] = '*';
+    g->field[g->m_bomb[1]][i-1] = '*';
+    g->field[g->m_bomb[1]][i+1] = '*';
+  }
+  print_field(g);
+}
+
 int moval_a_b(game *g, int dx, int dy) {
   int i, j;
   int w = BONINGEN_WIDTH / 2;
@@ -136,6 +172,9 @@ void clear_b(game *game, int x, int y) {
 void print_field(game *game) {
   int i, j;
   //system("clear");
+  if ( !( game->m_bomb[0] == 0 && game->m_bomb[1] == 0) ) {
+    game->field[game->m_bomb[1]][game->m_bomb[0]] = '@';
+  }
   fprintf(stderr,  "\n");
   for (i = 0; i < _FIELD_HEIGHT; i++) {
     fprintf(stderr, "%s\n", game->field[i]);

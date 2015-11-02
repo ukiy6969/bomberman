@@ -1,5 +1,6 @@
 #include "boningen.h"
-
+#include <pthread.h>
+#include <unistd.h>
 #define FIELD_HEIGHT  23
 #define FIELD_WIDTH   35
 
@@ -19,6 +20,7 @@
 #define KEY_DOWN      's'
 #define KEY_RIGHT     'd'
 #define KEY_LEFT      'a'
+#define BOMB          ' '
 
 typedef struct {
   boningen b;
@@ -29,7 +31,14 @@ typedef struct {
   int a_b_y;
   int m_bomb[2];
   int a_bomb[2];
+  int m_is_bomb;
+  int a_is_bomb;
 } game;
+
+typedef struct {
+  int sleep;
+  game *game;
+} bomb_args;
 
 void create_game(game* game);
 void create_field(char f[_FIELD_HEIGHT][_FIELD_WIDTH]);
@@ -47,4 +56,5 @@ void move_a_b_right(game* g);
 void move_a_b_left(game* g);
 void move_a_b_up(game* g);
 void move_a_b_down(game* g);
-
+int set_bomb_m(game *g);
+void* bomb_thread_m(void *args);

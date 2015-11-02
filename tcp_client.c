@@ -35,9 +35,11 @@ void mclient(int fd, game *g) {
         move(g,position, c);
         system("clear");
         print_field(g);
-        printf("%d\n", c);
-        sprintf(b,"%d", c);
         write(fd, b, BUFSIZ);
+      }
+      if ( (c == BOMB) ) {
+        set_bomb_m(g);
+        print_field(g);
       }
     }
     if ( FD_ISSET(fd, &fds) ) {
