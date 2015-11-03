@@ -1,4 +1,4 @@
-server: tcp_server_select.c boningen.o game.o inet.h
+server: tcp_server_select.c boningen.o game.o inet.h tcp_client.c
 	gcc -O2 tcp_server_select.c boningen.o game.o -o server
 	gcc -O2 tcp_client.c boningen.o game.o -o client
 boningen.o: boningen.c boningen.h

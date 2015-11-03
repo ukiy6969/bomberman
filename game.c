@@ -7,6 +7,12 @@ void create_game(game* game) {
   game->m_b_y = DEF_GRD;
   game->a_b_x = DEF_A_POS_X;
   game->a_b_y = DEF_GRD;
+  game->m_bomb[0] = 0;
+  game->m_bomb[1] = 0;
+  game->a_bomb[0] = 0;
+  game->a_bomb[1] = 0;
+  game->m_is_bomb = 0;
+  game->a_is_bomb = 0;
 }
 
 void create_field(char f[_FIELD_HEIGHT][_FIELD_WIDTH]) {
@@ -118,6 +124,228 @@ int moval_a_b(game *g, int dx, int dy) {
   return 1;
 }
 
+
+
+int set_bomb_m(game *g) {
+  int x = g->m_b_x;
+  int y = g->m_b_y - 1;
+  if ( (x - 1) % 3 == 1 && (y - 1) % 3 == 1 && !g->m_is_bomb) {
+    g->m_bomb[0] = x;
+    g->m_bomb[1] = y;
+    g->m_is_bomb = 1;
+    return 1;
+  }
+  return 0;
+}
+
+int set_bomb_a(game *g) {
+  int x = g->a_b_x;
+  int y = g->a_b_y - 1;
+  if ( (x - 1) % 3 == 1 && (y - 1) % 3 == 1 && !g->a_is_bomb) {
+    g->a_bomb[0] = x;
+    g->a_bomb[1] = y;
+    g->a_is_bomb = 1;
+    return 1;
+  }
+  return 0;
+}
+
+void* bomb_thread_m(void *args) {
+  bomb_args *bargs = (bomb_args *)args;
+  game *g = bargs->game;
+  int sleeptime = bargs->sleep;
+  int i, j;
+  sleep(sleeptime);
+  if (! g->m_is_bomb ){
+    return NULL;
+  }
+  for(i = g->m_bomb[0]; i >= MAX_LEFT; i--) {
+    if (g->field[g->m_bomb[1]][i] == '-' ||
+        g->field[g->m_bomb[1]][i] == '|' ||
+        g->field[g->m_bomb[1]][i] == '#'){
+        break;
+    }
+    g->field[g->m_bomb[1]][i] = '*';
+    g->field[g->m_bomb[1]-1][i] = '*';
+    g->field[g->m_bomb[1]+1][i] = '*';
+  }
+  for(i = g->m_bomb[0]; i <= MAX_RIGHT+1; i++) {
+    if (g->field[g->m_bomb[1]][i] == '-' ||
+        g->field[g->m_bomb[1]][i] == '|' ||
+        g->field[g->m_bomb[1]][i] == '#'){
+      break;
+    }
+    g->field[g->m_bomb[1]][i] = '*';
+    g->field[g->m_bomb[1]-1][i] = '*';
+    g->field[g->m_bomb[1]+1][i] = '*';
+  }
+  for(i = g->m_bomb[1]; i >= MAX_UP; i--) {
+    if (g->field[i][g->m_bomb[0]] == '-' ||
+        g->field[i][g->m_bomb[0]] == '|' ||
+        g->field[i][g->m_bomb[0]] == '#'){
+      break;
+    }
+    g->field[i][g->m_bomb[0]] = '*';
+    g->field[i][g->m_bomb[0]-1] = '*';
+    g->field[i][g->m_bomb[0]+1] = '*';
+  }
+  for(i = g->m_bomb[1]; i <= MAX_DOWN; i++) {
+    if (g->field[i][g->m_bomb[0]] == '-' ||
+        g->field[i][g->m_bomb[0]] == '|' ||
+        g->field[i][g->m_bomb[0]] == '#'){
+        break;
+    }
+    g->field[i][g->m_bomb[0]] = '*';
+    g->field[i][g->m_bomb[0]-1] = '*';
+    g->field[i][g->m_bomb[0]+1] = '*';
+  }
+  print_field(g);
+  sleep(sleeptime);
+  for(i = g->m_bomb[0]; i >= MAX_LEFT; i--) {
+    if (g->field[g->m_bomb[1]][i] == '-' ||
+        g->field[g->m_bomb[1]][i] == '|' ||
+        g->field[g->m_bomb[1]][i] == '#'){
+        break;
+    }
+    g->field[g->m_bomb[1]][i] = ' ';
+    g->field[g->m_bomb[1]-1][i] = ' ';
+    g->field[g->m_bomb[1]+1][i] = ' ';
+  }
+  for(i = g->m_bomb[0]; i <= MAX_RIGHT+1; i++) {
+    if (g->field[g->m_bomb[1]][i] == '-' ||
+        g->field[g->m_bomb[1]][i] == '|' ||
+        g->field[g->m_bomb[1]][i] == '#'){
+      break;
+    }
+    g->field[g->m_bomb[1]][i] = ' ';
+    g->field[g->m_bomb[1]-1][i] = ' ';
+    g->field[g->m_bomb[1]+1][i] = ' ';
+  }
+  for(i = g->m_bomb[1]; i >= MAX_UP; i--) {
+    if (g->field[i][g->m_bomb[0]] == '-' ||
+        g->field[i][g->m_bomb[0]] == '|' ||
+        g->field[i][g->m_bomb[0]] == '#'){
+      break;
+    }
+    g->field[i][g->m_bomb[0]] = ' ';
+    g->field[i][g->m_bomb[0]-1] = ' ';
+    g->field[i][g->m_bomb[0]+1] = ' ';
+  }
+  for(i = g->m_bomb[1]; i <= MAX_DOWN; i++) {
+    if (g->field[i][g->m_bomb[0]] == '-' ||
+        g->field[i][g->m_bomb[0]] == '|' ||
+        g->field[i][g->m_bomb[0]] == '#'){
+      break;
+    }
+    g->field[i][g->m_bomb[0]] = ' ';
+    g->field[i][g->m_bomb[0]-1] = ' ';
+    g->field[i][g->m_bomb[0]+1] = ' ';
+  }
+  g->m_bomb[0] = 0;
+  g->m_bomb[1] = 0;
+  print_field(g);
+  g->m_is_bomb = 0;
+    return NULL;
+}
+
+void* bomb_thread_a(void *args) {
+  bomb_args *bargs = (bomb_args *)args;
+  game *g = bargs->game;
+  int sleeptime = bargs->sleep;
+  int i, j;
+  sleep(sleeptime);
+  if (! g->a_is_bomb ){
+    return NULL;
+  }
+  for(i = g->a_bomb[0]; i >= MAX_LEFT; i--) {
+    if (g->field[g->a_bomb[1]][i] == '-' ||
+        g->field[g->a_bomb[1]][i] == '|' ||
+        g->field[g->a_bomb[1]][i] == '#'){
+        break;
+    }
+    g->field[g->a_bomb[1]][i] = '*';
+    g->field[g->a_bomb[1]-1][i] = '*';
+    g->field[g->a_bomb[1]+1][i] = '*';
+  }
+  for(i = g->a_bomb[0]; i <= MAX_RIGHT+1; i++) {
+    if (g->field[g->a_bomb[1]][i] == '-' ||
+        g->field[g->a_bomb[1]][i] == '|' ||
+        g->field[g->a_bomb[1]][i] == '#'){
+      break;
+    }
+    g->field[g->a_bomb[1]][i] = '*';
+    g->field[g->a_bomb[1]-1][i] = '*';
+    g->field[g->a_bomb[1]+1][i] = '*';
+  }
+  for(i = g->a_bomb[1]; i >= MAX_UP; i--) {
+    if (g->field[i][g->a_bomb[0]] == '-' ||
+        g->field[i][g->a_bomb[0]] == '|' ||
+        g->field[i][g->a_bomb[0]] == '#'){
+      break;
+    }
+    g->field[i][g->a_bomb[0]] = '*';
+    g->field[i][g->a_bomb[0]-1] = '*';
+    g->field[i][g->a_bomb[0]+1] = '*';
+  }
+  for(i = g->a_bomb[1]; i <= MAX_DOWN; i++) {
+    if (g->field[i][g->a_bomb[0]] == '-' ||
+        g->field[i][g->a_bomb[0]] == '|' ||
+        g->field[i][g->a_bomb[0]] == '#'){
+        break;
+    }
+    g->field[i][g->a_bomb[0]] = '*';
+    g->field[i][g->a_bomb[0]-1] = '*';
+    g->field[i][g->a_bomb[0]+1] = '*';
+  }
+  print_field(g);
+  sleep(sleeptime);
+  for(i = g->a_bomb[0]; i >= MAX_LEFT; i--) {
+    if (g->field[g->a_bomb[1]][i] == '-' ||
+        g->field[g->a_bomb[1]][i] == '|' ||
+        g->field[g->a_bomb[1]][i] == '#'){
+        break;
+    }
+    g->field[g->a_bomb[1]][i] = ' ';
+    g->field[g->a_bomb[1]-1][i] = ' ';
+    g->field[g->a_bomb[1]+1][i] = ' ';
+  }
+  for(i = g->a_bomb[0]; i <= MAX_RIGHT+1; i++) {
+    if (g->field[g->a_bomb[1]][i] == '-' ||
+        g->field[g->a_bomb[1]][i] == '|' ||
+        g->field[g->a_bomb[1]][i] == '#'){
+      break;
+    }
+    g->field[g->a_bomb[1]][i] = ' ';
+    g->field[g->a_bomb[1]-1][i] = ' ';
+    g->field[g->a_bomb[1]+1][i] = ' ';
+  }
+  for(i = g->a_bomb[1]; i >= MAX_UP; i--) {
+    if (g->field[i][g->a_bomb[0]] == '-' ||
+        g->field[i][g->a_bomb[0]] == '|' ||
+        g->field[i][g->a_bomb[0]] == '#'){
+      break;
+    }
+    g->field[i][g->a_bomb[0]] = ' ';
+    g->field[i][g->a_bomb[0]-1] = ' ';
+    g->field[i][g->a_bomb[0]+1] = ' ';
+  }
+  for(i = g->a_bomb[1]; i <= MAX_DOWN; i++) {
+    if (g->field[i][g->a_bomb[0]] == '-' ||
+        g->field[i][g->a_bomb[0]] == '|' ||
+        g->field[i][g->a_bomb[0]] == '#'){
+      break;
+    }
+    g->field[i][g->a_bomb[0]] = ' ';
+    g->field[i][g->a_bomb[0]-1] = ' ';
+    g->field[i][g->a_bomb[0]+1] = ' ';
+  }
+  g->a_bomb[0] = 0;
+  g->a_bomb[1] = 0;
+  print_field(g);
+  g->a_is_bomb = 0;
+    return NULL;
+}
+
 void clear_b(game *game, int x, int y) {
   int i, j;
   int w = BONINGEN_WIDTH / 2;
@@ -135,11 +363,19 @@ void clear_b(game *game, int x, int y) {
 
 void print_field(game *game) {
   int i, j;
-  //system("clear");
+  if ( !( game->m_bomb[0] == 0 && game->m_bomb[1] == 0) ) {
+    game->field[game->m_bomb[1]][game->m_bomb[0]] = '@';
+  }
+  if ( !( game->a_bomb[0] == 0 && game->a_bomb[1] == 0) ) {
+    game->field[game->a_bomb[1]][game->a_bomb[0]] = '@';
+  }
   fprintf(stderr,  "\n");
+  system("/bin/stty cooked");
+  system("clear");
   for (i = 0; i < _FIELD_HEIGHT; i++) {
     fprintf(stderr, "%s\n", game->field[i]);
   }
+  system("/bin/stty raw");
 }
 
 int move(game* g, int position, int c) {
@@ -186,65 +422,65 @@ int move(game* g, int position, int c) {
 
 
 void move_m_b_right(game*g) {
-  if ( ! moval_m_b(g, 1, 0) ){
+  if ( ! moval_m_b(g, MOVE_DIFF, 0) ){
     return ;
   }
   clear_b(g, g->m_b_x, g->m_b_y);
-  show_m_b(g, g->m_b_x + 1, g->m_b_y);
+  show_m_b(g, g->m_b_x + MOVE_DIFF, g->m_b_y);
 }
 
 void move_m_b_left(game*g) {
-  if ( ! moval_m_b(g, -1, 0) ){
+  if ( ! moval_m_b(g, -MOVE_DIFF, 0) ){
     return ;
   }
   clear_b(g, g->m_b_x, g->m_b_y);
-  show_m_b(g, g->m_b_x - 1, g->m_b_y);
+  show_m_b(g, g->m_b_x - MOVE_DIFF, g->m_b_y);
 }
 
 void move_m_b_up(game*g) {
-  if ( ! moval_m_b(g, 0, -1) ){
+  if ( ! moval_m_b(g, 0, -MOVE_DIFF) ){
     return ;
   }
   clear_b(g, g->m_b_x, g->m_b_y);
-  show_m_b(g, g->m_b_x, g->m_b_y - 1);
+  show_m_b(g, g->m_b_x, g->m_b_y - MOVE_DIFF);
 }
 
 void move_m_b_down(game*g) {
-  if ( ! moval_m_b(g, 0, 1) ){
+  if ( ! moval_m_b(g, 0, MOVE_DIFF) ){
     return ;
   }
   clear_b(g, g->m_b_x, g->m_b_y);
-  show_m_b(g, g->m_b_x, g->m_b_y + 1);
+  show_m_b(g, g->m_b_x, g->m_b_y + MOVE_DIFF);
 }
 void move_a_b_right(game*g) {
-  if ( ! moval_a_b(g, 1, 0) ){
+  if ( ! moval_a_b(g, MOVE_DIFF, 0) ){
     return ;
   }
   clear_b(g, g->a_b_x, g->a_b_y);
-  show_a_b(g, g->a_b_x + 1, g->a_b_y);
+  show_a_b(g, g->a_b_x + MOVE_DIFF, g->a_b_y);
 }
 
 void move_a_b_left(game*g) {
-  if ( ! moval_a_b(g, -1, 0) ){
+  if ( ! moval_a_b(g, -MOVE_DIFF, 0) ){
     return ;
   }
   clear_b(g, g->a_b_x, g->a_b_y);
-  show_a_b(g, g->a_b_x - 1, g->a_b_y);
+  show_a_b(g, g->a_b_x - MOVE_DIFF, g->a_b_y);
 }
 
 void move_a_b_up(game*g) {
-  if ( ! moval_a_b(g, 0, -1) ){
+  if ( ! moval_a_b(g, 0, -MOVE_DIFF) ){
     return ;
   }
   clear_b(g, g->a_b_x, g->a_b_y);
-  show_a_b(g, g->a_b_x, g->a_b_y - 1);
+  show_a_b(g, g->a_b_x, g->a_b_y - MOVE_DIFF);
 }
 
 void move_a_b_down(game*g) {
-  if ( ! moval_a_b(g, 0, 1) ){
+  if ( ! moval_a_b(g, 0, MOVE_DIFF) ){
     return ;
   }
   clear_b(g, g->a_b_x, g->a_b_y);
-  show_a_b(g, g->a_b_x, g->a_b_y + 1);
+  show_a_b(g, g->a_b_x, g->a_b_y + MOVE_DIFF);
 }
 
