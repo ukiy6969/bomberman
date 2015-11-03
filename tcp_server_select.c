@@ -2,26 +2,54 @@
 #define BUFSIZE 1024
 
 int battle[2];
+game g;
 
-
-int service(int fd)                       /* サーバの仕事，終わりならば0を返す */
+int service(int fd, game* g)                       /* サーバの仕事，終わりならば0を返す */
 {                                         /* fd は通信に用いるファイル記述子 */
   char b[BUFSIZE];                        /* 一時的なバッファ */
   int n;
   int input;
+  int c;
 
   if ( (n = read(fd, b, BUFSIZE)) <= 0 )  /* fd から読み込む */
     return 1;
   if ( 31 > atoi(b) || 256 < atoi(b) ){
     return 1;
   }
-  printf("\n\nfd = %d, n = %d, b = \"%d\"\n\n", fd, n, atoi(b));
-  printf("%s\n", b);
+  printf("\nfd = %d, n = %d, b = \"%d\"\n", fd, n, atoi(b));
   if ( battle[0] == fd && battle[1] != 0) {
     write(battle[1], b, BUFSIZ);
+    c = atoi(b);
+    if ( (c == KEY_UP) || (c == KEY_DOWN)
+          || (c == KEY_LEFT) || (c == KEY_RIGHT) ) {
+      system("/bin/stty cooked");
+      move(g,0, c);
+      print_field(g);
+    }
+    if ( (c == BOMB) && !g->m_is_bomb) {
+      bomb_args bargs = { 2, g };
+      if ( g->position == 0) {
+        if (set_bomb_m(g) ){
+        }
+      }
+      print_field(g);
+    }
   } else if ( battle[1] == fd &&  battle[0] != 0) {
     write(battle[0], b, BUFSIZ);
+    c = atoi(b);
+    if ( (c == KEY_UP) || (c == KEY_DOWN)
+          || (c == KEY_LEFT) || (c == KEY_RIGHT) ) {
+      move(g,1, c);
+      print_field(g);
+    }
+    if ( (c == BOMB) && !g->m_is_bomb) {
+      bomb_args bargs = { 2, g };
+      if (set_bomb_a(g) ){
+      }
+      print_field(g);
+    }
   }
+  system("/bin/stty cooked");
                                          /* fd，長さ，受信文字列を出力 */
   return n;
 }
@@ -64,7 +92,6 @@ int main(int argc, char **argv)
   fd_set allfds, fds;                        /* ビットマスク */
   int fd, fd_min, fd_max;
 
-  game g;
   create_game(&g);
 
   if ( (sockfd = socket(PF_INET, SOCK_STREAM, 0)) < 0 ) /* ソケット */
@@ -104,7 +131,7 @@ int main(int argc, char **argv)
           update_min_max(newfd, &fd_min, &fd_max);
           printf("Accetpted new connection: fd = %d\n", newfd);
           FD_SET(newfd, &allfds);            /* selectによる調査対象に加える */
-        } else if ( service(fd) == 0 ) {     /* クライアントからの要求処理 */
+        } else if ( service(fd, &g) == 0 ) {     /* クライアントからの要求処理 */
           printf("Closed connection: fd = %d\n", fd);
           if ( shutdown(fd, SHUT_RDWR) < 0 ) /* これ以上の送受信を禁止 */
             error("cannot shutdown");

@@ -24,10 +24,17 @@
 
 #define MOVE_DIFF      3
 
+#define KEKKA_WIN      1
+#define KEKKA_LOSE     2
+#define KEKKA_DRAW     3
+
 typedef struct {
   boningen b;
   int position;
   char field[_FIELD_HEIGHT][_FIELD_WIDTH];
+  char lose[_FIELD_HEIGHT][_FIELD_WIDTH];
+  char win[_FIELD_HEIGHT][_FIELD_WIDTH];
+  char draw[_FIELD_HEIGHT][_FIELD_WIDTH];
   int m_b_x;
   int m_b_y;
   int a_b_x;
@@ -36,6 +43,7 @@ typedef struct {
   int a_bomb[2];
   int m_is_bomb;
   int a_is_bomb;
+  int kekka;
 } game;
 
 typedef struct {
@@ -45,6 +53,9 @@ typedef struct {
 
 void create_game(game* game);
 void create_field(char f[_FIELD_HEIGHT][_FIELD_WIDTH]);
+void create_lose(char f[_FIELD_HEIGHT][_FIELD_WIDTH]);
+void create_win(char f[_FIELD_HEIGHT][_FIELD_WIDTH]);
+void create_draw(char f[_FIELD_HEIGHT][_FIELD_WIDTH]);
 void show_boningen(game *game);
 void show_m_b(game *game, int x, int y);
 void show_a_b(game *game, int x, int y);

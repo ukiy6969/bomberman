@@ -3,6 +3,9 @@
 void create_game(game* game) {
   create_boningen(&game->b);
   create_field(game->field);
+  create_lose(game->lose);
+  create_win(game->win);
+  create_draw(game->draw);
   game->m_b_x = DEF_M_POS_X;
   game->m_b_y = DEF_GRD;
   game->a_b_x = DEF_A_POS_X;
@@ -23,6 +26,82 @@ void create_field(char f[_FIELD_HEIGHT][_FIELD_WIDTH]) {
   memcpy(f[4],  "|   ###   ###   ###   ###   ###   |", _FIELD_WIDTH);
   memcpy(f[5],  "|   ###   ###   ###   ###   ###   |", _FIELD_WIDTH);
   memcpy(f[6],  "|   ###   ###   ###   ###   ###   |", _FIELD_WIDTH);
+  memcpy(f[7],  "|                                 |", _FIELD_WIDTH);
+  memcpy(f[8],  "|                                 |", _FIELD_WIDTH);
+  memcpy(f[9],  "|                                 |", _FIELD_WIDTH);
+  memcpy(f[10], "|   ###   ###   ###   ###   ###   |", _FIELD_WIDTH);
+  memcpy(f[11], "|   ###   ###   ###   ###   ###   |", _FIELD_WIDTH);
+  memcpy(f[12], "|   ###   ###   ###   ###   ###   |", _FIELD_WIDTH);
+  memcpy(f[13], "|                                 |", _FIELD_WIDTH);
+  memcpy(f[14], "|                                 |", _FIELD_WIDTH);
+  memcpy(f[15], "|                                 |", _FIELD_WIDTH);
+  memcpy(f[16], "|   ###   ###   ###   ###   ###   |", _FIELD_WIDTH);
+  memcpy(f[17], "|   ###   ###   ###   ###   ###   |", _FIELD_WIDTH);
+  memcpy(f[18], "|   ###   ###   ###   ###   ###   |", _FIELD_WIDTH);
+  memcpy(f[19], "|                                 |", _FIELD_WIDTH);
+  memcpy(f[20], "|                                 |", _FIELD_WIDTH);
+  memcpy(f[21], "|                                 |", _FIELD_WIDTH);
+  memcpy(f[22], "-----------------------------------", _FIELD_WIDTH);
+}
+
+void create_lose(char f[_FIELD_HEIGHT][_FIELD_WIDTH]) {
+  memcpy(f[0],  "-----------------------------------", _FIELD_WIDTH);
+  memcpy(f[1],  "|                                 |", _FIELD_WIDTH);
+  memcpy(f[2],  "|   #      ###   ####  ####       |", _FIELD_WIDTH);
+  memcpy(f[3],  "|   #     #   #   #    #          |", _FIELD_WIDTH);
+  memcpy(f[4],  "|   #     #   #    #   ####       |", _FIELD_WIDTH);
+  memcpy(f[5],  "|   #     #   #     #  #          |", _FIELD_WIDTH);
+  memcpy(f[6],  "|   ####   ###   ####  ####       |", _FIELD_WIDTH);
+  memcpy(f[7],  "|                                 |", _FIELD_WIDTH);
+  memcpy(f[8],  "|                                 |", _FIELD_WIDTH);
+  memcpy(f[9],  "|                                 |", _FIELD_WIDTH);
+  memcpy(f[10], "|   ###   ###   ###   ###   ###   |", _FIELD_WIDTH);
+  memcpy(f[11], "|   ###   ###   ###   ###   ###   |", _FIELD_WIDTH);
+  memcpy(f[12], "|   ###   ###   ###   ###   ###   |", _FIELD_WIDTH);
+  memcpy(f[13], "|                                 |", _FIELD_WIDTH);
+  memcpy(f[14], "|                                 |", _FIELD_WIDTH);
+  memcpy(f[15], "|                                 |", _FIELD_WIDTH);
+  memcpy(f[16], "|   ###   ###   ###   ###   ###   |", _FIELD_WIDTH);
+  memcpy(f[17], "|   ###   ###   ###   ###   ###   |", _FIELD_WIDTH);
+  memcpy(f[18], "|   ###   ###   ###   ###   ###   |", _FIELD_WIDTH);
+  memcpy(f[19], "|                                 |", _FIELD_WIDTH);
+  memcpy(f[20], "|                                 |", _FIELD_WIDTH);
+  memcpy(f[21], "|                                 |", _FIELD_WIDTH);
+  memcpy(f[22], "-----------------------------------", _FIELD_WIDTH);
+}
+void create_win(char f[_FIELD_HEIGHT][_FIELD_WIDTH]) {
+  memcpy(f[0],  "-----------------------------------", _FIELD_WIDTH);
+  memcpy(f[1],  "|                                 |", _FIELD_WIDTH);
+  memcpy(f[2],  "|   #  #  #  ###  ##   #          |", _FIELD_WIDTH);
+  memcpy(f[3],  "|   # # # #   #   ##   #          |", _FIELD_WIDTH);
+  memcpy(f[4],  "|   # # # #   #   # #  #          |", _FIELD_WIDTH);
+  memcpy(f[5],  "|    #   #    #   #  # #          |", _FIELD_WIDTH);
+  memcpy(f[6],  "|    #   #   ###  #   ##          |", _FIELD_WIDTH);
+  memcpy(f[7],  "|                                 |", _FIELD_WIDTH);
+  memcpy(f[8],  "|                                 |", _FIELD_WIDTH);
+  memcpy(f[9],  "|                                 |", _FIELD_WIDTH);
+  memcpy(f[10], "|   ###   ###   ###   ###   ###   |", _FIELD_WIDTH);
+  memcpy(f[11], "|   ###   ###   ###   ###   ###   |", _FIELD_WIDTH);
+  memcpy(f[12], "|   ###   ###   ###   ###   ###   |", _FIELD_WIDTH);
+  memcpy(f[13], "|                                 |", _FIELD_WIDTH);
+  memcpy(f[14], "|                                 |", _FIELD_WIDTH);
+  memcpy(f[15], "|                                 |", _FIELD_WIDTH);
+  memcpy(f[16], "|   ###   ###   ###   ###   ###   |", _FIELD_WIDTH);
+  memcpy(f[17], "|   ###   ###   ###   ###   ###   |", _FIELD_WIDTH);
+  memcpy(f[18], "|   ###   ###   ###   ###   ###   |", _FIELD_WIDTH);
+  memcpy(f[19], "|                                 |", _FIELD_WIDTH);
+  memcpy(f[20], "|                                 |", _FIELD_WIDTH);
+  memcpy(f[21], "|                                 |", _FIELD_WIDTH);
+  memcpy(f[22], "-----------------------------------", _FIELD_WIDTH);
+}
+void create_draw(char f[_FIELD_HEIGHT][_FIELD_WIDTH]) {
+  memcpy(f[0],  "-----------------------------------", _FIELD_WIDTH);
+  memcpy(f[1],  "|                                 |", _FIELD_WIDTH);
+  memcpy(f[2],  "| ####    ####      #    #  #  #  |", _FIELD_WIDTH);
+  memcpy(f[3],  "| #   #   #  #     # #   # # # #  |", _FIELD_WIDTH);
+  memcpy(f[4],  "| #    #  ###     #####  # # # #  |", _FIELD_WIDTH);
+  memcpy(f[5],  "| #   #   #  #    #   #   #   #   |", _FIELD_WIDTH);
+  memcpy(f[6],  "| ####    #   #  #     #  #   #   |", _FIELD_WIDTH);
   memcpy(f[7],  "|                                 |", _FIELD_WIDTH);
   memcpy(f[8],  "|                                 |", _FIELD_WIDTH);
   memcpy(f[9],  "|                                 |", _FIELD_WIDTH);
@@ -155,6 +234,7 @@ void* bomb_thread_m(void *args) {
   game *g = bargs->game;
   int sleeptime = bargs->sleep;
   int i, j;
+  int attackm = 0, attacka = 0;
   sleep(sleeptime);
   if (! g->m_is_bomb ){
     return NULL;
@@ -200,12 +280,20 @@ void* bomb_thread_m(void *args) {
     g->field[i][g->m_bomb[0]+1] = '*';
   }
   print_field(g);
-  sleep(sleeptime);
   for(i = g->m_bomb[0]; i >= MAX_LEFT; i--) {
     if (g->field[g->m_bomb[1]][i] == '-' ||
         g->field[g->m_bomb[1]][i] == '|' ||
         g->field[g->m_bomb[1]][i] == '#'){
         break;
+    }
+    if ( ((g->m_bomb[1]+1) == g->m_b_y && i == g->m_b_x) &&
+         ((g->m_bomb[1]+1) == g->a_b_y && i == g->a_b_x)    ){
+      attackm = 1;
+      attacka = 1;
+    } else if ( (g->m_bomb[1]+1) == g->m_b_y && i == g->m_b_x) {
+      attackm = 1;
+    } else if ( (g->m_bomb[1]+1) == g->a_b_y && i == g->a_b_x ) {
+      attacka = 1;
     }
     g->field[g->m_bomb[1]][i] = ' ';
     g->field[g->m_bomb[1]-1][i] = ' ';
@@ -217,6 +305,15 @@ void* bomb_thread_m(void *args) {
         g->field[g->m_bomb[1]][i] == '#'){
       break;
     }
+    if ( ((g->m_bomb[1]+1) == g->m_b_y && i == g->m_b_x) &&
+         ((g->m_bomb[1]+1) == g->a_b_y && i == g->a_b_x)    ){
+      attacka = 1;
+      attackm = 1;
+    } else if ( (g->m_bomb[1]+1) == g->m_b_y && i == g->m_b_x) {
+      attackm = 1;
+    } else if ( (g->m_bomb[1]+1) == g->a_b_y && i == g->a_b_x ) {
+      attacka = 1;
+    }
     g->field[g->m_bomb[1]][i] = ' ';
     g->field[g->m_bomb[1]-1][i] = ' ';
     g->field[g->m_bomb[1]+1][i] = ' ';
@@ -226,6 +323,15 @@ void* bomb_thread_m(void *args) {
         g->field[i][g->m_bomb[0]] == '|' ||
         g->field[i][g->m_bomb[0]] == '#'){
       break;
+    }
+    if ( ((g->m_bomb[0]) == g->m_b_x && i == g->m_b_y) &&
+         ((g->m_bomb[0]) == g->a_b_x && i == g->a_b_y)    ){
+      attackm = 1;
+      attacka = 1;
+    } else if ( (g->m_bomb[0]) == g->m_b_x && i == g->m_b_y) {
+      attackm = 1;
+    } else if ( (g->m_bomb[0]) == g->a_b_x && i == g->a_b_y ) {
+      attacka = 1;
     }
     g->field[i][g->m_bomb[0]] = ' ';
     g->field[i][g->m_bomb[0]-1] = ' ';
@@ -237,10 +343,36 @@ void* bomb_thread_m(void *args) {
         g->field[i][g->m_bomb[0]] == '#'){
       break;
     }
+    if ( ((g->m_bomb[0]) == g->m_b_x && i == g->m_b_y) &&
+         ((g->m_bomb[0]) == g->a_b_x && i == g->a_b_y)    ){
+      attackm = 1;
+      attacka = 1;
+    } else if ( (g->m_bomb[0]) == g->m_b_x && i == g->m_b_y) {
+      attackm = 1;
+    } else if ( (g->m_bomb[0]) == g->a_b_x && i == g->a_b_y ) {
+      attacka = 1;
+    }
     g->field[i][g->m_bomb[0]] = ' ';
     g->field[i][g->m_bomb[0]-1] = ' ';
     g->field[i][g->m_bomb[0]+1] = ' ';
   }
+  if ( attacka == 1 && attackm  == 1) {
+    g->kekka = KEKKA_DRAW;
+    print_field(g);
+  } else if ( attacka && g->position == 1) {
+    g->kekka = KEKKA_LOSE;
+    print_field(g);
+  } else if ( attacka && g->position == 0) {
+    g->kekka = KEKKA_WIN;
+    print_field(g);
+  } else if (attackm && g->position == 1) {
+    g->kekka = KEKKA_WIN;
+    print_field(g);
+  } else if (attackm && g->position == 0) {
+    g->kekka = KEKKA_LOSE;
+    print_field(g);
+  }
+  sleep(sleeptime);
   g->m_bomb[0] = 0;
   g->m_bomb[1] = 0;
   print_field(g);
@@ -253,6 +385,8 @@ void* bomb_thread_a(void *args) {
   game *g = bargs->game;
   int sleeptime = bargs->sleep;
   int i, j;
+  int kekka;
+  int attackm = 0, attacka = 0;
   sleep(sleeptime);
   if (! g->a_is_bomb ){
     return NULL;
@@ -298,12 +432,20 @@ void* bomb_thread_a(void *args) {
     g->field[i][g->a_bomb[0]+1] = '*';
   }
   print_field(g);
-  sleep(sleeptime);
   for(i = g->a_bomb[0]; i >= MAX_LEFT; i--) {
     if (g->field[g->a_bomb[1]][i] == '-' ||
         g->field[g->a_bomb[1]][i] == '|' ||
         g->field[g->a_bomb[1]][i] == '#'){
         break;
+    }
+    if ( ((g->a_bomb[1]+1) == g->m_b_y && i == g->m_b_x) &&
+         ((g->a_bomb[1]+1) == g->a_b_y && i == g->a_b_x)    ){
+      attackm = 1;
+      attacka = 1;
+    } else if ( (g->a_bomb[1]+1) == g->m_b_y && i == g->m_b_x) {
+      attackm = 1;
+    } else if ( (g->a_bomb[1]+1) == g->a_b_y && i == g->a_b_x ) {
+      attacka = 1;
     }
     g->field[g->a_bomb[1]][i] = ' ';
     g->field[g->a_bomb[1]-1][i] = ' ';
@@ -315,6 +457,15 @@ void* bomb_thread_a(void *args) {
         g->field[g->a_bomb[1]][i] == '#'){
       break;
     }
+    if ( ((g->a_bomb[1]+1) == g->m_b_y && i == g->m_b_x) &&
+         ((g->a_bomb[1]+1) == g->a_b_y && i == g->a_b_x)    ){
+      attackm = 1;
+      attacka = 1;
+    } else if ( (g->m_bomb[1]+1) == g->m_b_y && i == g->m_b_x) {
+      attackm = 1;
+    } else if ( (g->m_bomb[1]+1) == g->a_b_y && i == g->a_b_x ) {
+      attacka = 1;
+    }
     g->field[g->a_bomb[1]][i] = ' ';
     g->field[g->a_bomb[1]-1][i] = ' ';
     g->field[g->a_bomb[1]+1][i] = ' ';
@@ -324,6 +475,15 @@ void* bomb_thread_a(void *args) {
         g->field[i][g->a_bomb[0]] == '|' ||
         g->field[i][g->a_bomb[0]] == '#'){
       break;
+    }
+    if ( ((g->a_bomb[0]) == g->m_b_x && i == g->m_b_y) &&
+         ((g->a_bomb[0]) == g->a_b_x && i == g->a_b_y)    ){
+      attackm = 1;
+      attacka = 1;
+    } else if ( (g->m_bomb[0]) == g->m_b_x && i == g->m_b_y) {
+      attackm = 1;
+    } else if ( (g->m_bomb[0]) == g->a_b_x && i == g->a_b_y ) {
+      attacka = 1;
     }
     g->field[i][g->a_bomb[0]] = ' ';
     g->field[i][g->a_bomb[0]-1] = ' ';
@@ -335,10 +495,41 @@ void* bomb_thread_a(void *args) {
         g->field[i][g->a_bomb[0]] == '#'){
       break;
     }
+    if ( ((g->a_bomb[0]) == g->m_b_x && i == g->m_b_y) &&
+         ((g->a_bomb[0]) == g->a_b_x && i == g->a_b_y)    ){
+      attackm = 1;
+      attacka = 1;
+    } else if ( (g->m_bomb[0]) == g->m_b_x && i == g->m_b_y) {
+      attackm = 1;
+    } else if ( (g->m_bomb[0]) == g->a_b_x && i == g->a_b_y ) {
+      attacka = 1;
+    }
     g->field[i][g->a_bomb[0]] = ' ';
     g->field[i][g->a_bomb[0]-1] = ' ';
     g->field[i][g->a_bomb[0]+1] = ' ';
   }
+  if ( attacka == 1 && attackm == 1 ) {
+    sleep(1);
+    g->kekka = KEKKA_DRAW;
+    print_field(g);
+  } else if ( attacka && g->position == 1) {
+    sleep(1);
+    g->kekka = KEKKA_LOSE;
+    print_field(g);
+  } else if ( attacka && g->position == 0) {
+    sleep(1);
+    g->kekka = KEKKA_WIN;
+    print_field(g);
+  } else if (attackm && g->position == 1) {
+    sleep(1);
+    g->kekka = KEKKA_WIN;
+    print_field(g);
+  } else if (attackm && g->position == 0) {
+    sleep(1);
+    g->kekka = KEKKA_LOSE;
+    print_field(g);
+  }
+  sleep(sleeptime);
   g->a_bomb[0] = 0;
   g->a_bomb[1] = 0;
   print_field(g);
@@ -372,8 +563,22 @@ void print_field(game *game) {
   fprintf(stderr,  "\n");
   system("/bin/stty cooked");
   system("clear");
-  for (i = 0; i < _FIELD_HEIGHT; i++) {
-    fprintf(stderr, "%s\n", game->field[i]);
+  if (game->kekka == KEKKA_DRAW){
+    for (i = 0; i < _FIELD_HEIGHT; i++) {
+      fprintf(stderr, "%s\n", game->draw[i]);
+    }
+  }else if (game->kekka == KEKKA_LOSE) {
+    for (i = 0; i < _FIELD_HEIGHT; i++) {
+      fprintf(stderr, "%s\n", game->lose[i]);
+    }
+  }else if (game->kekka == KEKKA_WIN) {
+    for (i = 0; i < _FIELD_HEIGHT; i++) {
+      fprintf(stderr, "%s\n", game->win[i]);
+    }
+  }else {
+    for (i = 0; i < _FIELD_HEIGHT; i++) {
+      fprintf(stderr, "%s\n", game->field[i]);
+    }
   }
   system("/bin/stty raw");
 }
