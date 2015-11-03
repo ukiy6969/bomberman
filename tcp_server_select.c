@@ -3,19 +3,6 @@
 
 int battle[2];
 
-char reverse(char s) {
-  if (islower(s)){
-    return (char)toupper((int)s);
-  }
-  return (char)tolower((int)s);
-}
-
-void reverse_str(char *src, char *dist, int n) {
-  int i;
-  for (i = 0; i < n; i++) {
-    dist[i] = reverse(src[i]);
-  }
-}
 
 int service(int fd)                       /* サーバの仕事，終わりならば0を返す */
 {                                         /* fd は通信に用いるファイル記述子 */
@@ -79,9 +66,6 @@ int main(int argc, char **argv)
 
   game g;
   create_game(&g);
-  print_b(&g.b);
-  show_boningen(&g);
-  print_field(&g);
 
   if ( (sockfd = socket(PF_INET, SOCK_STREAM, 0)) < 0 ) /* ソケット */
     error("cannot create socket");

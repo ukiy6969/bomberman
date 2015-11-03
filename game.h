@@ -22,8 +22,11 @@
 #define KEY_LEFT      'a'
 #define BOMB          ' '
 
+#define MOVE_DIFF      3
+
 typedef struct {
   boningen b;
+  int position;
   char field[_FIELD_HEIGHT][_FIELD_WIDTH];
   int m_b_x;
   int m_b_y;
@@ -58,3 +61,5 @@ void move_a_b_up(game* g);
 void move_a_b_down(game* g);
 int set_bomb_m(game *g);
 void* bomb_thread_m(void *args);
+int set_bomb_a(game *g);
+void* bomb_thread_a(void *args);
